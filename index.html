@@ -509,10 +509,14 @@
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <h3>You're registered! 🎉</h3>
-        <p>Tap the button below to message us on WhatsApp right now and claim your 50% discount.</p>
+        <p>Your 50% discount is reserved. Place your first order now — it takes less than 3 minutes.</p>
+        <a href="https://swiftfifteenexpress.com/order"
+          style="display:block; margin-top:1rem; background:var(--orange); color:white; padding:0.95rem 1.75rem; border-radius:10px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:1rem; text-decoration:none; text-align:center; letter-spacing:0.01em;">
+          📦 Place Your First Order Now →
+        </a>
         <a id="waRedirect" href="https://wa.me/2348029234994?text=Hi%20Swift-Fifteen%20Express!%20I%20just%20registered%20on%20your%20website%20and%20I%27d%20like%20to%20claim%20my%2050%25%20discount." target="_blank"
-          style="display:inline-block; margin-top:1rem; background:#25D366; color:white; padding:0.85rem 1.75rem; border-radius:10px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.95rem; text-decoration:none;">
-          💬 Chat Us on WhatsApp Now
+          style="display:block; margin-top:0.65rem; background:transparent; color:#6b7280; padding:0.6rem 1.75rem; border-radius:10px; font-family:'Open Sans',sans-serif; font-weight:500; font-size:0.82rem; text-decoration:none; text-align:center; border:1px solid #e5e7eb;">
+          💬 Have a question first? Chat us on WhatsApp
         </a>
       </div>
     </div>
@@ -736,7 +740,7 @@
   // Go to Make.com → Create Scenario → Add "Webhooks" → Custom Webhook
   // Copy the generated URL and paste it here
   // ============================================================
-  const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
+  const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/YOUR_WEBHOOK_ID_HERE";
 
   const form = document.getElementById("leadForm");
   const submitBtn = document.getElementById("submitBtn");
@@ -776,10 +780,10 @@
         value: 1
       });
 
-      // Pre-fill WhatsApp message with user's name
+      // Pre-fill WhatsApp secondary link with user's name
       const waLink = document.getElementById('waRedirect');
       const name = data.first_name + ' ' + data.last_name;
-      waLink.href = `https://wa.me/2347060642357?text=Hi%20Swift-Fifteen%20Express!%20My%20name%20is%20${encodeURIComponent(name)}%20from%20${encodeURIComponent(data.business_name)}.%20I%20just%20registered%20on%20your%20website%20and%20I%27d%20like%20to%20claim%20my%2050%25%20discount.`;
+      waLink.href = `https://wa.me/2348029234994?text=Hi%20Swift-Fifteen%20Express!%20My%20name%20is%20${encodeURIComponent(name)}%20from%20${encodeURIComponent(data.business_name || 'N/A')}.%20I%20just%20registered%20and%20have%20a%20question%20before%20placing%20my%20order.`;
 
       // Show success
       form.style.display = "none";
