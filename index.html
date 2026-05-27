@@ -753,23 +753,26 @@
     submitBtn.textContent = "Submitting...";
 
     const data = {
-      "First Name": form.first_name.value.trim(),
-      "Last Name": form.last_name.value.trim(),
-      "Business Name": form.business_name.value.trim(),
-      "Phone Number": form.phone.value.trim(),
-      "Email Address": form.email.value.trim(),
-      "Monthly Shipments": form.monthly_shipments.value,
-      "Business Type": form.business_type.value,
-      "Source": "Landing Page — Hero Form",
-      "Submitted At": new Date().toISOString(),
-      "Offer": "50% off first 3 shipments"
+      First_Name: form.first_name.value.trim(),
+      Last_Name: form.last_name.value.trim(),
+      Business_Name: form.business_name.value.trim(),
+      Phone_Number: form.phone.value.trim(),
+      Email_Address: form.email.value.trim(),
+      Monthly_Shipments: form.monthly_shipments.value,
+      Business_Type: form.business_type.value,
+      Source: "Landing Page",
+      Submitted_At: new Date().toISOString(),
+      Offer: "50% off first 3 shipments"
     };
 
     try {
+      // Send as flat form-encoded so Make.com maps each field individually
+      const params = new URLSearchParams();
+      Object.entries(data).forEach(([k, v]) => params.append(k, String(v)));
       await fetch(MAKE_WEBHOOK_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString(),
         mode: "no-cors"
       });
 
