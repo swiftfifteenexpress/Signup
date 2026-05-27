@@ -740,39 +740,33 @@
   // Go to Make.com → Create Scenario → Add "Webhooks" → Custom Webhook
   // Copy the generated URL and paste it here
   // ============================================================
-  const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
-
+ const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
   const form = document.getElementById("leadForm");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
-
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
-
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
-
-    const data = {
-      first_name: form.first_name.value.trim(),
-      last_name: form.last_name.value.trim(),
-      business_name: form.business_name.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-      monthly_shipments: form.monthly_shipments.value,
-      business_type: form.business_type.value,
-      source: "Landing Page — Hero Form",
-      submitted_at: new Date().toISOString(),
-      offer: "50% off first 3 shipments"
-    };
 
     try {
       await fetch(MAKE_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          first_name: form.first_name.value.trim(),
+          last_name: form.last_name.value.trim(),
+          business_name: form.business_name.value.trim(),
+          phone: form.phone.value.trim(),
+          email: form.email.value.trim(),
+          monthly_shipments: form.monthly_shipments.value,
+          business_type: form.business_type.value,
+          source: "Landing Page — Hero Form",
+          submitted_at: new Date().toISOString(),
+          offer: "50% off first 3 shipments"
+        }),
         mode: "no-cors"
       });
-
       // GA4 — track lead form submission
       gtag('event', 'generate_lead', {
         event_category: 'Lead Form',
