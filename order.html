@@ -1060,7 +1060,7 @@ async function submitOrder() {
       `*Amount:* ₦${price.toLocaleString()}%0A%0A` +
       `I have made the bank transfer. Please confirm and assign my rider. Thank you!`
     );
-    document.getElementById('waOrderBtn').href = `https://wa.me/2348029234994?text=${msg}`;
+    document.getElementById('waOrderBtn').href = `https://wa.me/2347060642357?text=${msg}`;
 
     // Show success
     document.getElementById('page5').classList.remove('active');
@@ -1068,7 +1068,7 @@ async function submitOrder() {
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch(err) {
-    alert('Something went wrong. Please try again or WhatsApp us directly on 08029234994.');
+    alert('Something went wrong. Please try again or WhatsApp us directly on +2347060642357.');
     btn.disabled = false;
     btn.textContent = '✅ Confirm Order & Notify Us on WhatsApp';
   }
