@@ -364,7 +364,7 @@ footer a{color:var(--orange);text-decoration:none}
 <!-- HERO -->
 <div class="order-hero">
   <h1>Place Your <em>Delivery Order</em></h1>
-  <p>Fill in the details below — takes less than 3 minutes. Your rider will be assigned within 30 minutes of payment confirmation.</p>
+  <p>Fill in the details below — takes less than 3 minutes. Your rider will be assigned within 30 minutes of payment confirmation.Swift-Fifteen Express is powered by Castlerock Econetwork Africa LTD.</p>
   <div class="progress-bar" id="progressBar">
     <div class="prog-step">
       <div class="prog-circle active" id="pc1">1</div>
@@ -572,20 +572,20 @@ footer a{color:var(--orange);text-decoration:none}
         <div class="field-group" style="margin-top:0.5rem">
           <label>Delivery Type <span class="req">*</span></label>
           <div class="radio-grid" id="deliveryTypeGrid" style="margin-top:0.5rem">
-            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','2500','dt-sameday')">
+            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','6500','dt-sameday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Same-day Lagos</div><div class="radio-card-sub">Delivered today within Lagos</div></div>
-              <div class="price-tag">₦2,500+</div>
+              <div class="price-tag">₦6,500+</div>
             </div>
-            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','1800','dt-nextday')">
+            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','4800','dt-nextday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Next-day Lagos</div><div class="radio-card-sub">Delivered tomorrow within Lagos</div></div>
-              <div class="price-tag">₦1,800+</div>
+              <div class="price-tag">₦4,800+</div>
             </div>
-            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','5000','dt-interstate')">
+            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','10000','dt-interstate')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Interstate 48hr</div><div class="radio-card-sub">Delivery to any state in Nigeria</div></div>
-              <div class="price-tag">₦5,000+</div>
+              <div class="price-tag">₦10,000+</div>
             </div>
           </div>
           <div class="error-msg" id="err-deliveryType" style="display:none">Please select a delivery type</div>
@@ -714,15 +714,16 @@ footer a{color:var(--orange);text-decoration:none}
         <!-- BANK DETAILS -->
         <div class="bank-card">
           <h3>💳 Pay via Bank Transfer</h3>
+          <h3>Swift-fifteen Express is Powered by Castlerock Econetwork Africa LTD</h3>
           <div class="bank-row">
-            <div><div class="bank-label">Bank</div><div class="bank-value">— ADD YOUR BANK NAME —</div></div>
+            <div><div class="bank-label">Bank</div><div class="bank-value">Zenith</div></div>
           </div>
           <div class="bank-row">
-            <div><div class="bank-label">Account Number</div><div class="bank-value account" id="acctNum">— ADD ACCOUNT NUMBER —</div></div>
+            <div><div class="bank-label">Account Number</div><div class="bank-value account" id="acctNum">1229516668</div></div>
             <button class="copy-btn" onclick="copyAcct()">Copy</button>
           </div>
           <div class="bank-row">
-            <div><div class="bank-label">Account Name</div><div class="bank-value">Swift-Fifteen Express</div></div>
+            <div><div class="bank-label">Account Name</div><div class="bank-value">Castlerock Econetwork Africa LTD</div></div>
           </div>
           <div class="bank-row">
             <div><div class="bank-label">Amount</div><div class="bank-value" id="bankAmount" style="color:var(--orange-light)">—</div></div>
@@ -731,7 +732,7 @@ footer a{color:var(--orange);text-decoration:none}
 
         <div class="alert alert-orange">
           <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <p><strong>Important:</strong> Click "Confirm Order" after making the transfer. We will verify payment and assign your rider within 30 minutes. Your tracking link will be sent to your WhatsApp.</p>
+          <p><strong>Important:</strong> Click "Confirm Order" after making the transfer. We will verify payment and assign your rider within 15 minutes. Your tracking link will be sent to your WhatsApp.</p>
         </div>
 
         <button class="btn-submit" id="submitBtn" onclick="submitOrder()">
@@ -750,27 +751,27 @@ footer a{color:var(--orange);text-decoration:none}
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Order Confirmed! 🎉</h2>
-    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>30 minutes</strong>.</p>
+    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>15 minutes</strong>.</p>
     <a href="#" id="waOrderBtn" class="wa-confirm-btn" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.476 2 2 6.477 2 11.992c0 1.956.546 3.79 1.497 5.353L2 22l4.786-1.487A9.97 9.97 0 0011.99 22c5.514 0 9.99-4.477 9.99-9.992C21.98 6.477 17.504 2 11.99 2z"/></svg>
       Send Payment Confirmation on WhatsApp
     </a>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:08029234994" style="color:var(--orange)">08029234994</a></p>
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:0706 064 2357" style="color:var(--orange)">0706 064 2357</a></p>
   </div>
 
 </div><!-- /order-wrap -->
 
 <footer>
-  <p>© 2025 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2348029234994">WhatsApp</a></p>
+  <p>© 2026 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2347060642357">WhatsApp</a></p>
 </footer>
 
 <script>
 // ============================================================
 // CONFIGURATION — UPDATE THESE
 // ============================================================
-const WEBHOOK_URL = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
-const BANK_ACCOUNT = "— ADD YOUR ACCOUNT NUMBER —";
-const BANK_NAME    = "— ADD YOUR BANK NAME —";
+const WEBHOOK_URL = "https://hook.eu1.make.com/m6nwuingrfc9nco7zktdfn56criif8v7";
+const BANK_ACCOUNT = "1229516668";
+const BANK_NAME    = "Zenith Bank";
 
 // ============================================================
 
