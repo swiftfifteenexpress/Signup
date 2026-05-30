@@ -342,6 +342,22 @@ footer a{color:var(--orange);text-decoration:none}
   .btn-back{flex:none}
   .btn-next{flex:none}
 }
+
+/* PAYMENT METHOD TABS */
+.pay-tabs{display:flex;gap:0;margin-bottom:1.25rem;border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--gray-200)}
+.pay-tab{flex:1;padding:0.75rem 0.5rem;text-align:center;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.82rem;background:var(--gray-50);color:var(--gray-400);border:none;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.pay-tab.active{background:var(--navy);color:white}
+.pay-tab:first-child{border-right:1.5px solid var(--gray-200)}
+.pay-panel{display:none}
+.pay-panel.active{display:block}
+.paystack-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:1.1rem;border:none;border-radius:var(--radius);background:linear-gradient(135deg,#011B33 0%,#00C3F7 100%);color:white;font-family:'Montserrat',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:opacity 0.2s;text-decoration:none;margin-top:0.5rem;letter-spacing:0.01em}
+.paystack-btn:hover{opacity:0.9}
+.paystack-btn svg{width:22px;height:22px;fill:white;flex-shrink:0}
+.paystack-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.72rem;color:var(--gray-400);margin-top:0.6rem;text-align:center}
+.paystack-secure svg{width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2.5}
+.amount-highlight{background:var(--orange-pale);border:1.5px solid var(--orange);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.amount-highlight .ah-label{font-size:0.82rem;color:var(--gray-600)}
+.amount-highlight .ah-amount{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.6rem;color:var(--orange)}
 </style>
 </head>
 <body>
@@ -364,7 +380,7 @@ footer a{color:var(--orange);text-decoration:none}
 <!-- HERO -->
 <div class="order-hero">
   <h1>Place Your <em>Delivery Order</em></h1>
-  <p>Fill in the details below — takes less than 3 minutes. Your rider will be assigned within 30 minutes of payment confirmation.Swift-Fifteen Express is powered by Castlerock Econetwork Africa LTD.</p>
+  <p>Fill in the details below — takes less than 3 minutes. Your rider will be assigned within 30 minutes of payment confirmation.</p>
   <div class="progress-bar" id="progressBar">
     <div class="prog-step">
       <div class="prog-circle active" id="pc1">1</div>
@@ -536,7 +552,7 @@ footer a{color:var(--orange);text-decoration:none}
         <div class="field-row full">
           <div class="field-group">
             <label>Delivery Address <span class="req">*</span></label>
-            <textarea id="deliveryAddress" placeholder="e.g. 5 Victoria Island Boulevard, Lagos Island — behind GTBank"></textarea>
+            <textarea id="deliveryAddress" placeholder="e.g. 5 Victoria Island Boulevard, Lagos Island — behind GTBank" onblur="fetchEstimate()"></textarea>
             <div class="field-hint">Include street, area and a nearby landmark</div>
             <div class="error-msg" id="err-deliveryAddress">Please enter the delivery address</div>
           </div>
@@ -572,20 +588,20 @@ footer a{color:var(--orange);text-decoration:none}
         <div class="field-group" style="margin-top:0.5rem">
           <label>Delivery Type <span class="req">*</span></label>
           <div class="radio-grid" id="deliveryTypeGrid" style="margin-top:0.5rem">
-            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','6500','dt-sameday')">
+            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','2500','dt-sameday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Same-day Lagos</div><div class="radio-card-sub">Delivered today within Lagos</div></div>
-              <div class="price-tag">₦6,500+</div>
+              <div class="price-tag">₦2,500+</div>
             </div>
-            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','4800','dt-nextday')">
+            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','1800','dt-nextday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Next-day Lagos</div><div class="radio-card-sub">Delivered tomorrow within Lagos</div></div>
-              <div class="price-tag">₦4,800+</div>
+              <div class="price-tag">₦1,800+</div>
             </div>
-            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','10000','dt-interstate')">
+            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','5000','dt-interstate')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Interstate 48hr</div><div class="radio-card-sub">Delivery to any state in Nigeria</div></div>
-              <div class="price-tag">₦10,000+</div>
+              <div class="price-tag">₦5,000+</div>
             </div>
           </div>
           <div class="error-msg" id="err-deliveryType" style="display:none">Please select a delivery type</div>
@@ -706,33 +722,68 @@ footer a{color:var(--orange);text-decoration:none}
           <!-- filled by JS -->
         </div>
 
-        <div class="price-summary" id="priceSummary">
-          <div class="ps-label">Amount to pay<strong id="psService">—</strong></div>
-          <div class="ps-amount" id="psAmount">—</div>
+<!-- price summary moved into payment section -->
+
+        <!-- PAYMENT SECTION -->
+        <!-- Amount to pay -->
+        <div class="amount-highlight">
+          <div class="ah-label">Amount to pay<br/><span id="psService" style="font-weight:700;color:var(--navy);font-size:0.88rem">—</span></div>
+          <div class="ah-amount" id="psAmount">—</div>
         </div>
 
-        <!-- BANK DETAILS -->
-        <div class="bank-card">
-          <h3>💳 Pay via Bank Transfer</h3>
-          <h3>Swift-fifteen Express is Powered by Castlerock Econetwork Africa LTD</h3>
-          <div class="bank-row">
-            <div><div class="bank-label">Bank</div><div class="bank-value">Zenith</div></div>
-          </div>
-          <div class="bank-row">
-            <div><div class="bank-label">Account Number</div><div class="bank-value account" id="acctNum">1229516668</div></div>
-            <button class="copy-btn" onclick="copyAcct()">Copy</button>
-          </div>
-          <div class="bank-row">
-            <div><div class="bank-label">Account Name</div><div class="bank-value">Castlerock Econetwork Africa LTD</div></div>
-          </div>
-          <div class="bank-row">
-            <div><div class="bank-label">Amount</div><div class="bank-value" id="bankAmount" style="color:var(--orange-light)">—</div></div>
-          </div>
+        <!-- Payment method tabs -->
+        <div class="pay-tabs">
+          <button class="pay-tab active" onclick="switchPayTab('paystack',this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Pay Online (Card/Transfer)
+          </button>
+          <button class="pay-tab" onclick="switchPayTab('bank',this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            Bank Transfer
+          </button>
         </div>
 
-        <div class="alert alert-orange">
-          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <p><strong>Important:</strong> Click "Confirm Order" after making the transfer. We will verify payment and assign your rider within 15 minutes. Your tracking link will be sent to your WhatsApp.</p>
+        <!-- PAYSTACK PANEL -->
+        <div class="pay-panel active" id="panel-paystack">
+          <div class="alert alert-blue" style="margin-bottom:1rem">
+            <svg viewBox="0 0 24 24" style="stroke:#3b82f6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Pay securely with your card, bank transfer, or USSD via Paystack. Your order is confirmed instantly after payment.</p>
+          </div>
+          <a id="paystackBtn" href="#" target="_blank" class="paystack-btn" onclick="openPaystack(event)">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+            Pay Now with Paystack →
+          </a>
+          <div class="paystack-secure">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secured by Paystack · 256-bit SSL encryption
+          </div>
+          <p style="font-size:0.75rem;color:var(--gray-400);text-align:center;margin-top:0.75rem">
+            After payment, tap the WhatsApp button below to send us your confirmation and order details.
+          </p>
+        </div>
+
+        <!-- BANK TRANSFER PANEL -->
+        <div class="pay-panel" id="panel-bank">
+          <div class="bank-card">
+            <h3>🏦 Pay via Bank Transfer</h3>
+            <div class="bank-row">
+              <div><div class="bank-label">Bank</div><div class="bank-value" id="bankNameDisplay">— ADD YOUR BANK NAME —</div></div>
+            </div>
+            <div class="bank-row">
+              <div><div class="bank-label">Account Number</div><div class="bank-value account" id="acctNum">— ADD ACCOUNT NUMBER —</div></div>
+              <button class="copy-btn" onclick="copyAcct()">Copy</button>
+            </div>
+            <div class="bank-row">
+              <div><div class="bank-label">Account Name</div><div class="bank-value">Swift-Fifteen Express</div></div>
+            </div>
+            <div class="bank-row">
+              <div><div class="bank-label">Amount</div><div class="bank-value" id="bankAmount" style="color:var(--orange-light)">—</div></div>
+            </div>
+          </div>
+          <div class="alert alert-orange" style="margin-top:0.75rem">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <p><strong>Important:</strong> After transferring, tap "Confirm Order" below and send us your payment screenshot on WhatsApp. Your rider will be assigned within 30 minutes.</p>
+          </div>
         </div>
 
         <button class="btn-submit" id="submitBtn" onclick="submitOrder()">
@@ -751,27 +802,30 @@ footer a{color:var(--orange);text-decoration:none}
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Order Confirmed! 🎉</h2>
-    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>15 minutes</strong>.</p>
+    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>30 minutes</strong>.</p>
     <a href="#" id="waOrderBtn" class="wa-confirm-btn" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.476 2 2 6.477 2 11.992c0 1.956.546 3.79 1.497 5.353L2 22l4.786-1.487A9.97 9.97 0 0011.99 22c5.514 0 9.99-4.477 9.99-9.992C21.98 6.477 17.504 2 11.99 2z"/></svg>
       Send Payment Confirmation on WhatsApp
     </a>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:0706 064 2357" style="color:var(--orange)">0706 064 2357</a></p>
+    <div id="trackingLinkBox" style="display:none;width:100%;max-width:420px;margin:0 auto"></div>
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:08029234994" style="color:var(--orange)">08029234994</a></p>
   </div>
 
 </div><!-- /order-wrap -->
 
 <footer>
-  <p>© 2026 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2347060642357">WhatsApp</a></p>
+  <p>© 2025 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2348029234994">WhatsApp</a></p>
 </footer>
 
 <script>
 // ============================================================
 // CONFIGURATION — UPDATE THESE
 // ============================================================
-const WEBHOOK_URL = "https://hook.eu1.make.com/m6nwuingrfc9nco7zktdfn56criif8v7";
-const BANK_ACCOUNT = "1229516668";
-const BANK_NAME    = "Zenith Bank";
+const VERCEL_BASE  = "https://swiftfifteen-api.vercel.app";
+const WEBHOOK_URL  = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
+const BANK_ACCOUNT = "— ADD YOUR ACCOUNT NUMBER —";
+const BANK_NAME    = "— ADD YOUR BANK NAME —";
+const PATH_B_ACTIVE = true;
 
 // ============================================================
 
@@ -784,7 +838,9 @@ const state = {
   deliveryPrice: 0,
   pkgType: '',
   pkgWeight: '',
-  specialHandling: []
+  specialHandling: [],
+  livePrices: null,
+  kwikpikTracking: null
 };
 
 // Pricing map
@@ -970,6 +1026,13 @@ function buildSummary() {
   document.getElementById('psAmount').textContent = formatNGN(price);
   document.getElementById('bankAmount').textContent = formatNGN(price);
   document.getElementById('acctNum').textContent = BANK_ACCOUNT;
+  const bankNameEl = document.getElementById('bankNameDisplay');
+  if (bankNameEl) bankNameEl.textContent = BANK_NAME;
+  // Update Paystack button href with correct amount
+  const amountKobo = price * 100;
+  const emailVal = encodeURIComponent(document.getElementById('email').value || '');
+  document.getElementById('paystackBtn').href =
+    `https://paystack.shop/pay/swiftfifteenexpress?amount=${amountKobo}&email=${emailVal}`;
 }
 
 function v(id) { return (document.getElementById(id)||{}).value || ''; }
@@ -981,6 +1044,30 @@ function copyAcct() {
     btn.textContent = 'Copied!';
     setTimeout(() => btn.textContent = 'Copy', 2000);
   });
+}
+
+// Payment tab switcher
+function switchPayTab(tab, el) {
+  document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// Open Paystack with dynamic amount
+function openPaystack(e) {
+  e.preventDefault();
+  const price = getPrice();
+  if (!price || price === 0) {
+    alert('Please complete all order details first so we can calculate your delivery fee.');
+    return;
+  }
+  // Paystack amount is in kobo (multiply NGN by 100)
+  const amountKobo = price * 100;
+  const email = encodeURIComponent(document.getElementById('email').value || '');
+  const ref   = 'SFX-' + Date.now();
+  const url   = `https://paystack.shop/pay/swiftfifteenexpress?amount=${amountKobo}&email=${email}&ref=${ref}`;
+  window.open(url, '_blank');
 }
 
 // Submit
@@ -1060,15 +1147,62 @@ async function submitOrder() {
       `*Amount:* ₦${price.toLocaleString()}%0A%0A` +
       `I have made the bank transfer. Please confirm and assign my rider. Thank you!`
     );
-    document.getElementById('waOrderBtn').href = `https://wa.me/2347060642357?text=${msg}`;
+    document.getElementById('waOrderBtn').href = `https://wa.me/2348029234994?text=${msg}`;
 
-    // Show success
+    // ── Path B: Auto-dispatch via Kwikpik ──────────────────
+    if (PATH_B_ACTIVE) {
+      try {
+        btn.textContent = 'Dispatching your rider...';
+        const dispatchRes = await fetch(VERCEL_BASE + '/api/dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_id:            data.order_id,
+            sender_name:         data.first_name + ' ' + data.last_name,
+            sender_phone:        data.phone,
+            pickup_address:      data.pickup_address,
+            pickup_city:         data.pickup_city,
+            pickup_date:         data.pickup_date,
+            pickup_time:         data.pickup_time,
+            recipient_name:      data.recipient_name,
+            recipient_phone:     data.recipient_phone,
+            delivery_address:    data.delivery_address,
+            package_description: data.package_description,
+            package_weight:      data.package_weight,
+            special_handling:    data.special_handling
+          })
+        });
+        const dispatchData = await dispatchRes.json();
+        if (dispatchData.success && dispatchData.tracking_url) {
+          state.kwikpikTracking = dispatchData;
+          // Update WhatsApp message to include tracking link
+          const trackMsg = encodeURIComponent(
+            `Hi Swift-Fifteen! Order ${data.order_id} placed & rider dispatched!\n` +
+            `Track live: ${dispatchData.tracking_url}\n` +
+            `Pickup: ${data.pickup_address}\n` +
+            `Deliver to: ${data.recipient_name} — ${data.delivery_address}\n` +
+            `Amount: \u20a6${price.toLocaleString()} — transfer sent.`
+          );
+          document.getElementById('waOrderBtn').href = `https://wa.me/2348029234994?text=${trackMsg}`;
+          // Show live tracking box on success screen
+          const tbox = document.getElementById('trackingLinkBox');
+          if (tbox) {
+            tbox.innerHTML = `<div style="margin-top:1rem;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:1rem;text-align:left"><div style="font-size:0.75rem;font-weight:700;color:#16a34a;letter-spacing:0.04em;margin-bottom:6px">🎉 RIDER DISPATCHED</div><div style="font-size:0.85rem;color:#1e2533;margin-bottom:8px">Your Kwikpik rider is on the way. Track your delivery live:</div><a href="${dispatchData.tracking_url}" target="_blank" style="display:block;background:#1A3C6E;color:white;padding:0.7rem 1rem;border-radius:8px;text-align:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.85rem;text-decoration:none;">📍 Track My Delivery Live →</a></div>`;
+            tbox.style.display = 'block';
+          }
+        }
+      } catch(dispatchErr) {
+        console.error('Dispatch error (non-blocking):', dispatchErr);
+      }
+    }
+
+    // Show success screen
     document.getElementById('page5').classList.remove('active');
     document.getElementById('successScreen').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch(err) {
-    alert('Something went wrong. Please try again or WhatsApp us directly on +2347060642357.');
+    alert('Something went wrong. Please try again or WhatsApp us directly on 08029234994.');
     btn.disabled = false;
     btn.textContent = '✅ Confirm Order & Notify Us on WhatsApp';
   }
