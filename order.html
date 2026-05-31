@@ -415,6 +415,15 @@ footer a{color:var(--orange);text-decoration:none}
 <!-- MAIN -->
 <div class="order-wrap">
 
+  <!-- Launch offer banner — shown only June 1–3 2026 -->
+  <div id="launchBanner" style="display:none;background:linear-gradient(135deg,#E8620A,#f97316);border-radius:var(--radius);padding:0.9rem 1.25rem;margin-bottom:1rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+    <div>
+      <div style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;color:white">🎉 Launch Offer — 50% OFF All Deliveries!</div>
+      <div style="font-size:0.78rem;color:rgba(255,255,255,0.85);margin-top:2px">Valid June 1–3 only · New customers · Prices shown already include your discount</div>
+    </div>
+    <div id="offerCountdown" style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.9rem;color:white;background:rgba(0,0,0,0.2);padding:6px 14px;border-radius:6px;white-space:nowrap"></div>
+  </div>
+
   <div class="trust-strip">
     <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Every package insured</div>
     <div class="trust-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 30-min response</div>
@@ -763,19 +772,19 @@ footer a{color:var(--orange);text-decoration:none}
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Order Confirmed! 🎉</h2>
-    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>15 minutes</strong>.</p>
+    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>30 minutes</strong>.</p>
     <a href="#" id="waOrderBtn" class="wa-confirm-btn" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.476 2 2 6.477 2 11.992c0 1.956.546 3.79 1.497 5.353L2 22l4.786-1.487A9.97 9.97 0 0011.99 22c5.514 0 9.99-4.477 9.99-9.992C21.98 6.477 17.504 2 11.99 2z"/></svg>
       Send Payment Confirmation on WhatsApp
     </a>
     <div id="trackingLinkBox" style="display:none;width:100%;max-width:420px;margin:0 auto"></div>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:07060642357" style="color:var(--orange)">07060642357</a></p>
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:08029234994" style="color:var(--orange)">08029234994</a></p>
   </div>
 
 </div><!-- /order-wrap -->
 
 <footer>
-  <p>© 2026 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2347060642357">WhatsApp</a></p>
+  <p>© 2025 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2348029234994">WhatsApp</a></p>
 </footer>
 
 <script>
@@ -783,7 +792,7 @@ footer a{color:var(--orange);text-decoration:none}
 // CONFIGURATION
 // ============================================================
 const VERCEL_BASE         = "https://swiftfifteen-api.vercel.app";
-const WEBHOOK_URL         = "https://hook.eu1.make.com/m6nwuingrfc9nco7zktdfn56criif8v7";
+const WEBHOOK_URL         = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
 const PAYSTACK_PUBLIC_KEY = "pk_live_c8e115a5c1357bd5b95fd67eec6781b3f74715db";
 // ============================================================
 
@@ -796,13 +805,40 @@ const state = {
 };
 
 // ── Helpers ──────────────────────────────────────────────────
+
+// Launch offer: 50% off first 3 bookings — June 1–3 2026 WAT only
+function isLaunchOfferActive() {
+  const now       = new Date();
+  const offerStart = new Date('2026-06-01T00:00:00+01:00'); // WAT
+  const offerEnd   = new Date('2026-06-03T23:59:59+01:00'); // WAT
+  return now >= offerStart && now <= offerEnd;
+}
+
 function getPrice() {
   if (!state.deliveryType) return 0;
-  if (state.livePrices && state.livePrices[state.deliveryType]) {
-    return state.livePrices[state.deliveryType];
+
+  // Get Kwikpik base price (before any margin)
+  const kwikpikBase = state.kwikpikBase || 0;
+  let price = 0;
+
+  if (kwikpikBase > 0) {
+    // Add 25% margin on top of Kwikpik charge
+    price = Math.ceil((kwikpikBase * 1.25) / 100) * 100;
+  } else if (state.livePrices && state.livePrices[state.deliveryType]) {
+    price = state.livePrices[state.deliveryType];
+  } else {
+    price = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000}[state.deliveryType] || 0;
   }
-  return { 'Same-day Lagos': 3000, 'Next-day Lagos': 2500, 'Interstate 48hr': 5000 }[state.deliveryType] || 0;
+
+  // Apply 50% launch discount if active
+  if (isLaunchOfferActive()) {
+    price = Math.ceil((price * 0.5) / 100) * 100;
+    price = Math.max(price, 500); // minimum ₦500 even with discount
+  }
+
+  return price;
 }
+
 function formatNGN(n) { return '₦' + n.toLocaleString('en-NG'); }
 function v(id) { return (document.getElementById(id)||{}).value || ''; }
 
@@ -891,14 +927,36 @@ async function fetchEstimate() {
       body: JSON.stringify({pickup_address: pickup, delivery_address: delivery})
     });
     const data = await res.json();
-    if (data.success) {
-      const sd   = data.your_price;
-      const nd   = Math.max(Math.ceil((sd * 0.85)/100)*100, 2500);
-      const ist  = Math.max(Math.ceil((sd * 1.2)/100)*100, 5000);
+    if (data.success && !data.fallback) {
+      // Store raw Kwikpik base price (before our margin)
+      state.kwikpikBase = data.kwikpik_price;
+
+      // Calculate prices with 25% margin
+      const sdBase  = data.kwikpik_price;
+      const ndBase  = sdBase * 0.85;           // next-day slightly cheaper
+      const istBase = sdBase * 1.2;            // interstate costs more
+
+      // Apply margin and round to nearest ₦100
+      const sdFull  = Math.ceil((sdBase  * 1.25) / 100) * 100;
+      const ndFull  = Math.max(Math.ceil((ndBase  * 1.25) / 100) * 100, 2500);
+      const istFull = Math.max(Math.ceil((istBase * 1.25) / 100) * 100, 5000);
+
+      // Apply 50% launch discount if active
+      const discount = isLaunchOfferActive() ? 0.5 : 1.0;
+      const sd  = Math.max(Math.ceil((sdFull  * discount) / 100) * 100, 500);
+      const nd  = Math.max(Math.ceil((ndFull  * discount) / 100) * 100, 500);
+      const ist = Math.max(Math.ceil((istFull * discount) / 100) * 100, 500);
+
       state.livePrices = {'Same-day Lagos': sd, 'Next-day Lagos': nd, 'Interstate 48hr': ist};
-      if (samedayEl)    samedayEl.textContent    = formatNGN(sd);
-      if (nextdayEl)    nextdayEl.textContent    = formatNGN(nd);
-      if (interstateEl) interstateEl.textContent = formatNGN(ist);
+
+      if (samedayEl)    samedayEl.textContent    = formatNGN(sd) + (discount < 1 ? ' 🎉' : '');
+      if (nextdayEl)    nextdayEl.textContent    = formatNGN(nd) + (discount < 1 ? ' 🎉' : '');
+      if (interstateEl) interstateEl.textContent = formatNGN(ist) + (discount < 1 ? ' 🎉' : '');
+
+      // Show launch banner if offer is active
+      const banner = document.getElementById('launchBanner');
+      if (banner) banner.style.display = discount < 1 ? 'flex' : 'none';
+
       if (state.deliveryType && state.livePrices[state.deliveryType]) {
         state.deliveryPrice = state.livePrices[state.deliveryType];
       }
@@ -906,7 +964,8 @@ async function fetchEstimate() {
       if (samedayEl)    samedayEl.textContent    = '₦3,000+';
       if (nextdayEl)    nextdayEl.textContent    = '₦2,500+';
       if (interstateEl) interstateEl.textContent = '₦5,000+';
-      state.livePrices = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000};
+      state.kwikpikBase = 0;
+      state.livePrices  = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000};
     }
   } catch(err) {
     if (samedayEl)    samedayEl.textContent    = '₦3,000+';
@@ -1061,40 +1120,7 @@ async function onPaymentSuccess(reference, orderData) {
   window.scrollTo({top:0, behavior:'smooth'});
 
   try {
-    // Step 1 — Log to Make.com webhook
-    const params = new URLSearchParams();
-    const flatOrder = {
-      Order_ID:            orderData.order_id,
-      Submitted_At:        orderData.submitted_at,
-      First_Name:          v('firstName'),
-      Last_Name:           v('lastName'),
-      Phone_Number:        orderData.sender_phone,
-      Email_Address:       orderData.sender_email,
-      Business_Name:       orderData.business_name,
-      Pickup_Address:      orderData.pickup_address,
-      Pickup_City:         orderData.pickup_city,
-      Pickup_Date:         orderData.pickup_date,
-      Pickup_Time:         orderData.pickup_time,
-      Recipient_Name:      orderData.recipient_name,
-      Recipient_Phone:     orderData.recipient_phone,
-      Delivery_Address:    orderData.delivery_address,
-      Delivery_State:      orderData.delivery_state,
-      Delivery_City:       orderData.delivery_city,
-      Delivery_Type:       orderData.delivery_type,
-      Package_Type:        orderData.package_type,
-      Package_Weight:      orderData.package_weight,
-      Package_Description: orderData.package_description,
-      Declared_Value_NGN:  orderData.declared_value,
-      Special_Handling:    orderData.special_handling,
-      Amount_NGN:          orderData.amount_ngn,
-      Payment_Method:      'Paystack',
-      Paystack_Reference:  reference,
-      Status:              'Paid — Dispatching'
-    };
-    Object.entries(flatOrder).forEach(([k,vv])=>params.append(k,String(vv)));
-    fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString(),mode:'no-cors'});
-
-    // Step 2 — Verify payment + dispatch Kwikpik via Vercel
+    // Step 1 — Verify payment + dispatch Kwikpik via Vercel FIRST
     const verifyRes = await fetch(VERCEL_BASE + '/api/verify-payment', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
@@ -1102,6 +1128,45 @@ async function onPaymentSuccess(reference, orderData) {
     });
     const verifyData = await verifyRes.json();
     console.log('Verify + dispatch result:', verifyData);
+
+    // Step 2 — Log everything to Make.com webhook INCLUDING tracking link
+    const params = new URLSearchParams();
+    const flatOrder = {
+      Order_ID:            orderData.order_id,
+      Submitted_At:        orderData.submitted_at,
+      First_Name:          orderData.sender_name.split(' ')[0] || '',
+      Last_Name:           orderData.sender_name.split(' ').slice(1).join(' ') || '',
+      Phone_Number:        orderData.sender_phone,
+      Email_Address:       orderData.sender_email,
+      Business_Name:       orderData.business_name || '',
+      Pickup_Address:      orderData.pickup_address,
+      Pickup_City:         orderData.pickup_city || '',
+      Pickup_Date:         orderData.pickup_date || '',
+      Pickup_Time:         orderData.pickup_time || '',
+      Recipient_Name:      orderData.recipient_name,
+      Recipient_Phone:     orderData.recipient_phone,
+      Delivery_Address:    orderData.delivery_address,
+      Delivery_State:      orderData.delivery_state || '',
+      Delivery_City:       orderData.delivery_city || '',
+      Delivery_Type:       orderData.delivery_type,
+      Package_Type:        orderData.package_type || '',
+      Package_Weight:      orderData.package_weight || '',
+      Package_Description: orderData.package_description || '',
+      Declared_Value_NGN:  orderData.declared_value || '',
+      Special_Handling:    orderData.special_handling || '',
+      Kwikpik_Base_NGN:    state.kwikpikBase || '',
+      Amount_NGN:          orderData.amount_ngn,
+      Launch_Discount:     isLaunchOfferActive() ? '50%' : 'None',
+      Payment_Method:      'Paystack',
+      Paystack_Reference:  reference,
+      Payment_Verified:    verifyData.payment_verified ? 'Yes' : 'No',
+      Kwikpik_ID:          verifyData.kwikpik_id || '',
+      Tracking_URL:        verifyData.tracking_url || '',
+      Dispatch_Status:     verifyData.dispatch_status || 'unknown',
+      Status:              verifyData.dispatch_status === 'success' ? 'Paid & Dispatched' : 'Paid — Manual Dispatch Needed'
+    };
+    Object.entries(flatOrder).forEach(([k,vv])=>params.append(k,String(vv)));
+    fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString(),mode:'no-cors'});
 
     // Step 3 — Fire GA4 + Meta Pixel purchase events
     gtag('event','purchase',{event_category:'Order Form',event_label:state.deliveryType,value:orderData.amount_ngn});
@@ -1128,10 +1193,10 @@ async function onPaymentSuccess(reference, orderData) {
     } else if (verifyData.payment_verified) {
       // Payment confirmed but dispatch needs manual follow-up
       successScreen.querySelector('h2').textContent = 'Payment Confirmed! 🎉';
-      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link via SMS within 30 minutes.`;
+      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link on WhatsApp within 30 minutes.`;
       const waMsg = encodeURIComponent(`Hi Swift-Fifteen! Payment confirmed for Order ${orderData.order_id}. Paystack ref: ${reference}. Please assign my rider. Pickup: ${orderData.pickup_address}. Deliver to: ${orderData.recipient_name} at ${orderData.delivery_address}.`);
       const waBtn = document.getElementById('waOrderBtn');
-      if (waBtn) { waBtn.href = `https://wa.me/2347060642357?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
+      if (waBtn) { waBtn.href = `https://wa.me/2348029234994?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
     }
 
     window.scrollTo({top:0, behavior:'smooth'});
@@ -1148,6 +1213,30 @@ async function onPaymentSuccess(reference, orderData) {
 
 // Init
 updateProgress(1);
+
+// Show launch banner and start countdown if offer is active
+(function() {
+  if (!isLaunchOfferActive()) return;
+  const banner = document.getElementById('launchBanner');
+  if (banner) banner.style.display = 'flex';
+  function tick() {
+    const now    = new Date();
+    const end    = new Date('2026-06-03T23:59:59+01:00');
+    const diff   = end - now;
+    if (diff <= 0) {
+      const el = document.getElementById('offerCountdown');
+      if (el) el.textContent = 'Offer ended';
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const el = document.getElementById('offerCountdown');
+    if (el) el.textContent = `Ends in ${h}h ${m}m ${s}s`;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 </script>
 </body>
 </html>
