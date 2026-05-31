@@ -763,19 +763,19 @@ footer a{color:var(--orange);text-decoration:none}
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Order Confirmed! 🎉</h2>
-    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>30 minutes</strong>.</p>
+    <p>Your order has been received and logged. Now tap the button below to send us your payment confirmation on WhatsApp — your rider will be assigned within <strong>15 minutes</strong>.</p>
     <a href="#" id="waOrderBtn" class="wa-confirm-btn" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.476 2 2 6.477 2 11.992c0 1.956.546 3.79 1.497 5.353L2 22l4.786-1.487A9.97 9.97 0 0011.99 22c5.514 0 9.99-4.477 9.99-9.992C21.98 6.477 17.504 2 11.99 2z"/></svg>
       Send Payment Confirmation on WhatsApp
     </a>
     <div id="trackingLinkBox" style="display:none;width:100%;max-width:420px;margin:0 auto"></div>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:08029234994" style="color:var(--orange)">08029234994</a></p>
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:07060642357" style="color:var(--orange)">07060642357</a></p>
   </div>
 
 </div><!-- /order-wrap -->
 
 <footer>
-  <p>© 2025 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2348029234994">WhatsApp</a></p>
+  <p>© 2026 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2347060642357">WhatsApp</a></p>
 </footer>
 
 <script>
@@ -783,7 +783,7 @@ footer a{color:var(--orange);text-decoration:none}
 // CONFIGURATION
 // ============================================================
 const VERCEL_BASE         = "https://swiftfifteen-api.vercel.app";
-const WEBHOOK_URL         = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
+const WEBHOOK_URL         = "https://hook.eu1.make.com/m6nwuingrfc9nco7zktdfn56criif8v7";
 const PAYSTACK_PUBLIC_KEY = "pk_live_c8e115a5c1357bd5b95fd67eec6781b3f74715db";
 // ============================================================
 
@@ -1128,10 +1128,10 @@ async function onPaymentSuccess(reference, orderData) {
     } else if (verifyData.payment_verified) {
       // Payment confirmed but dispatch needs manual follow-up
       successScreen.querySelector('h2').textContent = 'Payment Confirmed! 🎉';
-      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link on WhatsApp within 30 minutes.`;
+      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link via SMS within 30 minutes.`;
       const waMsg = encodeURIComponent(`Hi Swift-Fifteen! Payment confirmed for Order ${orderData.order_id}. Paystack ref: ${reference}. Please assign my rider. Pickup: ${orderData.pickup_address}. Deliver to: ${orderData.recipient_name} at ${orderData.delivery_address}.`);
       const waBtn = document.getElementById('waOrderBtn');
-      if (waBtn) { waBtn.href = `https://wa.me/2348029234994?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
+      if (waBtn) { waBtn.href = `https://wa.me/2347060642357?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
     }
 
     window.scrollTo({top:0, behavior:'smooth'});
