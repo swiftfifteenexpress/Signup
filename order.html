@@ -35,6 +35,9 @@ src="https://www.facebook.com/tr?id=4394100084212040&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 
+<!-- Paystack Popup JS -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -727,68 +730,26 @@ footer a{color:var(--orange);text-decoration:none}
         <!-- PAYMENT SECTION -->
         <!-- Amount to pay -->
         <div class="amount-highlight">
-          <div class="ah-label">Amount to pay<br/><span id="psService" style="font-weight:700;color:var(--navy);font-size:0.88rem">—</span></div>
+          <div class="ah-label">Delivery fee<br/><span id="psService" style="font-weight:700;color:var(--navy);font-size:0.88rem">—</span></div>
           <div class="ah-amount" id="psAmount">—</div>
         </div>
 
-        <!-- Payment method tabs -->
-        <div class="pay-tabs">
-          <button class="pay-tab active" onclick="switchPayTab('paystack',this)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            Pay Online (Card/Transfer)
-          </button>
-          <button class="pay-tab" onclick="switchPayTab('bank',this)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            Bank Transfer
-          </button>
+        <div class="alert alert-blue" style="margin-bottom:1.25rem">
+          <svg viewBox="0 0 24 24" style="stroke:#3b82f6;fill:none;stroke-width:2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <p>Pay securely via card, bank transfer or USSD. Your rider is dispatched automatically the moment payment is confirmed — no manual steps needed.</p>
         </div>
 
-        <!-- PAYSTACK PANEL -->
-        <div class="pay-panel active" id="panel-paystack">
-          <div class="alert alert-blue" style="margin-bottom:1rem">
-            <svg viewBox="0 0 24 24" style="stroke:#3b82f6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <p>Pay securely with your card, bank transfer, or USSD via Paystack. Your order is confirmed instantly after payment.</p>
-          </div>
-          <a id="paystackBtn" href="#" target="_blank" class="paystack-btn" onclick="openPaystack(event)">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-            Pay Now with Paystack →
-          </a>
-          <div class="paystack-secure">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Secured by Paystack · 256-bit SSL encryption
-          </div>
-          <p style="font-size:0.75rem;color:var(--gray-400);text-align:center;margin-top:0.75rem">
-            After payment, tap the WhatsApp button below to send us your confirmation and order details.
-          </p>
+        <a id="paystackBtn" href="#" class="paystack-btn" onclick="goToPaystack(event)">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+          Pay Now — Secure Checkout →
+        </a>
+
+        <div class="paystack-secure" style="margin-top:0.75rem">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#16a34a;fill:none;stroke-width:2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secured by Paystack · 256-bit SSL · Rider dispatched automatically after payment
         </div>
 
-        <!-- BANK TRANSFER PANEL -->
-        <div class="pay-panel" id="panel-bank">
-          <div class="bank-card">
-            <h3>🏦 Pay via Bank Transfer</h3>
-            <div class="bank-row">
-              <div><div class="bank-label">Bank</div><div class="bank-value" id="bankNameDisplay">— ADD YOUR BANK NAME —</div></div>
-            </div>
-            <div class="bank-row">
-              <div><div class="bank-label">Account Number</div><div class="bank-value account" id="acctNum">— ADD ACCOUNT NUMBER —</div></div>
-              <button class="copy-btn" onclick="copyAcct()">Copy</button>
-            </div>
-            <div class="bank-row">
-              <div><div class="bank-label">Account Name</div><div class="bank-value">Swift-Fifteen Express</div></div>
-            </div>
-            <div class="bank-row">
-              <div><div class="bank-label">Amount</div><div class="bank-value" id="bankAmount" style="color:var(--orange-light)">—</div></div>
-            </div>
-          </div>
-          <div class="alert alert-orange" style="margin-top:0.75rem">
-            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <p><strong>Important:</strong> After transferring, tap "Confirm Order" below and send us your payment screenshot on WhatsApp. Your rider will be assigned within 30 minutes.</p>
-          </div>
-        </div>
-
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">
-          ✅ Confirm Order & Notify Us on WhatsApp
-        </button>
+<!-- submit handled by Paystack redirect -->
       </div>
     </div>
     <div class="form-nav" style="margin-top:0">
@@ -819,67 +780,47 @@ footer a{color:var(--orange);text-decoration:none}
 
 <script>
 // ============================================================
-// CONFIGURATION — UPDATE THESE
+// CONFIGURATION
 // ============================================================
-const VERCEL_BASE  = "https://swiftfifteen-api.vercel.app";
-const WEBHOOK_URL  = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
-const BANK_ACCOUNT = "— ADD YOUR ACCOUNT NUMBER —";
-const BANK_NAME    = "— ADD YOUR BANK NAME —";
-const PATH_B_ACTIVE = true;
-
+const VERCEL_BASE         = "https://swiftfifteen-api.vercel.app";
+const WEBHOOK_URL         = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
+const PAYSTACK_PUBLIC_KEY = "pk_live_c8e115a5c1357bd5b95fd67eec6781b3f74715db";
 // ============================================================
 
 let currentPage = 1;
-const totalPages = 5;
 
-// State
 const state = {
-  deliveryType: '',
-  deliveryPrice: 0,
-  pkgType: '',
-  pkgWeight: '',
-  specialHandling: [],
-  livePrices: null,
-  kwikpikTracking: null
+  deliveryType: '', deliveryPrice: 0,
+  pkgType: '', pkgWeight: '',
+  specialHandling: [], livePrices: null
 };
 
-// getPrice always reads from live Kwikpik prices stored in state.livePrices
+// ── Helpers ──────────────────────────────────────────────────
 function getPrice() {
   if (!state.deliveryType) return 0;
   if (state.livePrices && state.livePrices[state.deliveryType]) {
     return state.livePrices[state.deliveryType];
   }
-  // Fallback if estimate hasn't run yet
-  const fallbacks = {
-    'Same-day Lagos':  3000,
-    'Next-day Lagos':  2500,
-    'Interstate 48hr': 5000
-  };
-  return fallbacks[state.deliveryType] || 0;
+  return { 'Same-day Lagos': 3000, 'Next-day Lagos': 2500, 'Interstate 48hr': 5000 }[state.deliveryType] || 0;
 }
+function formatNGN(n) { return '₦' + n.toLocaleString('en-NG'); }
+function v(id) { return (document.getElementById(id)||{}).value || ''; }
 
-function formatNGN(n) {
-  return '₦' + n.toLocaleString('en-NG');
-}
-
-// Progress bar
+// ── Progress bar ──────────────────────────────────────────────
 function updateProgress(page) {
   for (let i = 1; i <= 5; i++) {
     const circle = document.getElementById('pc' + i);
     const label  = document.getElementById('pl' + i);
     circle.classList.remove('active','done');
     label.classList.remove('active');
-    if (i < page)  { circle.classList.add('done'); circle.innerHTML = '✓'; }
-    else if (i === page) { circle.classList.add('active'); circle.innerHTML = i; label.classList.add('active'); }
-    else { circle.innerHTML = i; }
-    if (i < 5) {
-      const line = document.getElementById('line' + i);
-      line.classList.toggle('done', i < page);
-    }
+    if (i < page)       { circle.classList.add('done'); circle.innerHTML = '✓'; }
+    else if (i === page){ circle.classList.add('active'); circle.innerHTML = i; label.classList.add('active'); }
+    else                { circle.innerHTML = i; }
+    if (i < 5) document.getElementById('line' + i).classList.toggle('done', i < page);
   }
 }
 
-// Navigation
+// ── Navigation ────────────────────────────────────────────────
 function goNext(from) {
   if (!validatePage(from)) return;
   if (from === 4) buildSummary();
@@ -889,7 +830,6 @@ function goNext(from) {
   updateProgress(currentPage);
   window.scrollTo({top:0, behavior:'smooth'});
 }
-
 function goBack(from) {
   document.getElementById('page' + from).classList.remove('active');
   currentPage = from - 1;
@@ -898,7 +838,7 @@ function goBack(from) {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// Validation
+// ── Validation ────────────────────────────────────────────────
 function validatePage(page) {
   let valid = true;
   const checks = {
@@ -911,126 +851,97 @@ function validatePage(page) {
     checks[page].forEach(id => {
       const el = document.getElementById(id);
       const err = document.getElementById('err-' + id);
-      if (!el.value.trim()) {
-        el.classList.add('error');
-        if (err) err.style.display = 'block';
-        valid = false;
-      } else {
-        el.classList.remove('error');
-        if (err) err.style.display = 'none';
-      }
+      if (!el.value.trim()) { el.classList.add('error'); if (err) err.style.display='block'; valid=false; }
+      else { el.classList.remove('error'); if (err) err.style.display='none'; }
     });
   }
   if (page === 3) {
-    if (!state.deliveryType) {
-      document.getElementById('err-deliveryType').style.display = 'block';
-      valid = false;
-    } else {
-      document.getElementById('err-deliveryType').style.display = 'none';
-    }
+    if (!state.deliveryType) { document.getElementById('err-deliveryType').style.display='block'; valid=false; }
+    else document.getElementById('err-deliveryType').style.display='none';
   }
   if (page === 4) {
-    if (!state.pkgType) { document.getElementById('err-pkgType').style.display = 'block'; valid = false; }
-    else document.getElementById('err-pkgType').style.display = 'none';
-    if (!state.pkgWeight) { document.getElementById('err-pkgWeight').style.display = 'block'; valid = false; }
-    else document.getElementById('err-pkgWeight').style.display = 'none';
+    if (!state.pkgType)   { document.getElementById('err-pkgType').style.display='block'; valid=false; }
+    else document.getElementById('err-pkgType').style.display='none';
+    if (!state.pkgWeight) { document.getElementById('err-pkgWeight').style.display='block'; valid=false; }
+    else document.getElementById('err-pkgWeight').style.display='none';
     const d = document.getElementById('pkgDesc');
-    const v = document.getElementById('pkgValue');
+    const vv = document.getElementById('pkgValue');
     if (!d.value.trim()) { d.classList.add('error'); document.getElementById('err-pkgDesc').style.display='block'; valid=false; }
     else { d.classList.remove('error'); document.getElementById('err-pkgDesc').style.display='none'; }
-    if (!v.value) { v.classList.add('error'); document.getElementById('err-pkgValue').style.display='block'; valid=false; }
-    else { v.classList.remove('error'); document.getElementById('err-pkgValue').style.display='none'; }
+    if (!vv.value) { vv.classList.add('error'); document.getElementById('err-pkgValue').style.display='block'; valid=false; }
+    else { vv.classList.remove('error'); document.getElementById('err-pkgValue').style.display='none'; }
   }
   return valid;
 }
 
-// Delivery type selection
-// ── Kwikpik live price estimate ──────────────────────────
+// ── Live price estimate ───────────────────────────────────────
 async function fetchEstimate() {
   const pickup   = document.getElementById('pickupAddress').value.trim();
   const delivery = document.getElementById('deliveryAddress').value.trim();
   if (!pickup || !delivery) return;
-
   const samedayEl    = document.getElementById('price-sameday');
   const nextdayEl    = document.getElementById('price-nextday');
-  if (samedayEl)  samedayEl.textContent  = 'Calculating...';
-  if (nextdayEl)  nextdayEl.textContent  = 'Calculating...';
-
+  const interstateEl = document.getElementById('price-interstate');
+  if (samedayEl) samedayEl.textContent = 'Calculating...';
+  if (nextdayEl) nextdayEl.textContent = 'Calculating...';
   try {
-    const res = await fetch(VERCEL_BASE + '/api/estimate', {
+    const res  = await fetch(VERCEL_BASE + '/api/estimate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pickup_address: pickup, delivery_address: delivery })
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({pickup_address: pickup, delivery_address: delivery})
     });
     const data = await res.json();
-
     if (data.success) {
-      const samedayPrice  = data.your_price;
-      const nextdayPrice  = Math.max(Math.ceil((data.your_price * 0.85) / 100) * 100, 2500);
-      // Interstate = same-day price + 20% surcharge for longer haul, minimum ₦5,000
-      const interstatePrice = Math.max(Math.ceil((samedayPrice * 1.2) / 100) * 100, 5000);
-
-      state.livePrices = {
-        'Same-day Lagos':  samedayPrice,
-        'Next-day Lagos':  nextdayPrice,
-        'Interstate 48hr': interstatePrice
-      };
-      if (samedayEl)  samedayEl.textContent  = formatNGN(samedayPrice);
-      if (nextdayEl)  nextdayEl.textContent  = formatNGN(nextdayPrice);
-
-      // Update interstate price tag too
-      const interstateEl = document.getElementById('price-interstate');
-      if (interstateEl) interstateEl.textContent = formatNGN(interstatePrice);
-
-      // Update selected delivery type price if already chosen
+      const sd   = data.your_price;
+      const nd   = Math.max(Math.ceil((sd * 0.85)/100)*100, 2500);
+      const ist  = Math.max(Math.ceil((sd * 1.2)/100)*100, 5000);
+      state.livePrices = {'Same-day Lagos': sd, 'Next-day Lagos': nd, 'Interstate 48hr': ist};
+      if (samedayEl)    samedayEl.textContent    = formatNGN(sd);
+      if (nextdayEl)    nextdayEl.textContent    = formatNGN(nd);
+      if (interstateEl) interstateEl.textContent = formatNGN(ist);
       if (state.deliveryType && state.livePrices[state.deliveryType]) {
         state.deliveryPrice = state.livePrices[state.deliveryType];
       }
     } else {
-      if (samedayEl)  samedayEl.textContent  = '₦3,000+';
-      if (nextdayEl)  nextdayEl.textContent  = '₦2,500+';
+      if (samedayEl)    samedayEl.textContent    = '₦3,000+';
+      if (nextdayEl)    nextdayEl.textContent    = '₦2,500+';
+      if (interstateEl) interstateEl.textContent = '₦5,000+';
+      state.livePrices = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000};
     }
-  } catch (err) {
-    console.error('fetchEstimate error:', err);
-    if (samedayEl)  samedayEl.textContent  = '₦3,000+';
-    if (nextdayEl)  nextdayEl.textContent  = '₦2,500+';
-    state.livePrices = { 'Same-day Lagos': 3000, 'Next-day Lagos': 2500, 'Interstate 48hr': 5000 };
+  } catch(err) {
+    if (samedayEl)    samedayEl.textContent    = '₦3,000+';
+    if (nextdayEl)    nextdayEl.textContent    = '₦2,500+';
+    if (interstateEl) interstateEl.textContent = '₦5,000+';
+    state.livePrices = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000};
   }
 }
 
 function selectDelivery(type, id) {
   state.deliveryType  = type;
   state.deliveryPrice = (state.livePrices && state.livePrices[type]) || 3000;
-  document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById(id).classList.add('selected');
 }
 
 function updateDeliveryType() {
-  const state_ = document.getElementById('deliveryState').value;
+  const st   = document.getElementById('deliveryState').value;
   const note = document.getElementById('interstate-note');
-  if (state_ && state_ !== 'Lagos') {
-    // auto-select interstate
-    document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c => c.classList.remove('selected'));
+  if (st && st !== 'Lagos') {
+    document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c=>c.classList.remove('selected'));
     document.getElementById('dt-interstate').classList.add('selected');
     state.deliveryType  = 'Interstate 48hr';
     state.deliveryPrice = (state.livePrices && state.livePrices['Interstate 48hr']) || 5000;
     note.style.display  = 'flex';
-  } else {
-    note.style.display = 'none';
-  }
+  } else { note.style.display = 'none'; }
 }
 
-// Radio card helper
-function selectRadio(group, value, el) {
+function selectRadio(group, value) {
   state[group] = value;
-  // find parent radio-grid
   const card = event.currentTarget;
-  const grid = card.parentElement;
-  grid.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+  card.parentElement.querySelectorAll('.radio-card').forEach(c=>c.classList.remove('selected'));
   card.classList.add('selected');
 }
 
-// Checkbox
 document.querySelectorAll('.check-item').forEach(item => {
   item.addEventListener('click', function() {
     this.classList.toggle('checked');
@@ -1041,238 +952,202 @@ document.querySelectorAll('.check-item').forEach(item => {
   });
 });
 
-// Disable past dates
 document.getElementById('pickupDate').min = new Date().toISOString().split('T')[0];
 
-// Build summary
+// ── Build order summary on page 5 ────────────────────────────
 function buildSummary() {
   const price = getPrice();
-  const grid = document.getElementById('summaryGrid');
+  const grid  = document.getElementById('summaryGrid');
+  fbq('track','InitiateCheckout',{content_name:state.deliveryType,currency:'NGN',value:price});
 
-  // Meta Pixel — InitiateCheckout fires when user reaches the payment page
-  fbq('track', 'InitiateCheckout', {
-    content_name: state.deliveryType,
-    content_category: 'Delivery Order',
-    currency: 'NGN',
-    value: getPrice()
-  });
   const items = [
-    {label:'Sender', value: v('firstName') + ' ' + v('lastName')},
+    {label:'Sender',           value: v('firstName')+' '+v('lastName')},
     {label:'Phone / WhatsApp', value: v('phone')},
-    {label:'Business', value: v('businessName') || '—'},
-    {label:'Pickup Address', value: v('pickupAddress'), full:true},
-    {label:'Pickup Date & Time', value: v('pickupDate') + ' | ' + v('pickupTime')},
-    {label:'Recipient', value: v('recipientName') + ' (' + v('recipientPhone') + ')'},
+    {label:'Business',         value: v('businessName')||'—'},
+    {label:'Pickup Address',   value: v('pickupAddress'), full:true},
+    {label:'Pickup Date & Time',value: v('pickupDate')+' | '+v('pickupTime')},
+    {label:'Recipient',        value: v('recipientName')+' ('+v('recipientPhone')+')'},
     {label:'Delivery Address', value: v('deliveryAddress'), full:true},
-    {label:'Delivery State', value: v('deliveryState')},
-    {label:'Delivery Type', value: state.deliveryType},
-    {label:'Package', value: state.pkgType + ' — ' + state.pkgWeight},
-    {label:'Description', value: v('pkgDesc'), full:true},
-    {label:'Declared Value', value: formatNGN(parseInt(v('pkgValue'))||0)},
-    {label:'Special Handling', value: state.specialHandling.join(', ') || 'None'},
+    {label:'Delivery State',   value: v('deliveryState')},
+    {label:'Delivery Type',    value: state.deliveryType},
+    {label:'Package',          value: state.pkgType+' — '+state.pkgWeight},
+    {label:'Description',      value: v('pkgDesc'), full:true},
+    {label:'Declared Value',   value: formatNGN(parseInt(v('pkgValue'))||0)},
+    {label:'Special Handling', value: state.specialHandling.join(', ')||'None'},
   ];
   grid.innerHTML = items.map(i =>
     `<div class="summary-item${i.full?' full':''}"><div class="s-label">${i.label}</div><div class="s-value">${i.value}</div></div>`
   ).join('');
 
-  // Always re-read live price at summary time in case user changed delivery type
   const livePrice = getPrice();
-
-  // Update amount highlight box
-  const ahAmount = document.getElementById('psAmount');
+  const ahAmount  = document.getElementById('psAmount');
   const ahService = document.getElementById('psService');
   if (ahAmount)  ahAmount.textContent  = formatNGN(livePrice);
   if (ahService) ahService.textContent = state.deliveryType;
-
-  document.getElementById('bankAmount').textContent = formatNGN(livePrice);
-  document.getElementById('acctNum').textContent = BANK_ACCOUNT;
-  const bankNameEl = document.getElementById('bankNameDisplay');
-  if (bankNameEl) bankNameEl.textContent = BANK_NAME;
-
-  // Update Paystack button with live price in kobo
-  const amountKobo = livePrice * 100;
-  const emailVal   = encodeURIComponent(document.getElementById('email').value || '');
-  const paystackEl = document.getElementById('paystackBtn');
-  if (paystackEl) paystackEl.href =
-    `https://paystack.shop/pay/swiftfifteenexpress?amount=${amountKobo}&email=${emailVal}`;
 }
 
-function v(id) { return (document.getElementById(id)||{}).value || ''; }
-
-// Copy account number
-function copyAcct() {
-  navigator.clipboard.writeText(BANK_ACCOUNT).then(() => {
-    const btn = document.querySelector('.copy-btn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy', 2000);
-  });
-}
-
-// Payment tab switcher
-function switchPayTab(tab, el) {
-  document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-' + tab).classList.add('active');
-}
-
-// Open Paystack with dynamic amount
-function openPaystack(e) {
-  e.preventDefault();
+// ── Paystack Popup — opens inline, no redirect ────────────────
+function goToPaystack(e) {
+  if (e) e.preventDefault();
   const price = getPrice();
-  if (!price || price === 0) {
-    alert('Please complete all order details first so we can calculate your delivery fee.');
-    return;
-  }
-  // Paystack amount is in kobo (multiply NGN by 100)
-  const amountKobo = price * 100;
-  const email = encodeURIComponent(document.getElementById('email').value || '');
-  const ref   = 'SFX-' + Date.now();
-  const url   = `https://paystack.shop/pay/swiftfifteenexpress?amount=${amountKobo}&email=${email}&ref=${ref}`;
-  window.open(url, '_blank');
-}
+  if (!price) { alert('Please complete all order details first.'); return; }
 
-// Submit
-async function submitOrder() {
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting...';
+  const orderId = 'SFX-' + Date.now();
 
-  const price = getPrice();
-  const data = {
-    Order_ID: 'SFX-' + Date.now(),
-    Submitted_At: new Date().toISOString(),
-    First_Name: v('firstName'),
-    Last_Name: v('lastName'),
-    Phone_Number: v('phone'),
-    Email_Address: v('email'),
-    Business_Name: v('businessName'),
-    Pickup_Address: v('pickupAddress'),
-    Pickup_City: v('pickupCity'),
-    Pickup_Date: v('pickupDate'),
-    Pickup_Time: v('pickupTime'),
-    Pickup_Contact: v('pickupContact'),
-    Recipient_Name: v('recipientName'),
-    Recipient_Phone: v('recipientPhone'),
-    Delivery_Address: v('deliveryAddress'),
-    Delivery_State: v('deliveryState'),
-    Delivery_City: v('deliveryCity'),
-    Delivery_Type: state.deliveryType,
-    Package_Type: state.pkgType,
-    Package_Weight: state.pkgWeight,
-    Package_Description: v('pkgDesc'),
-    Declared_Value_NGN: v('pkgValue'),
-    Special_Handling: state.specialHandling.join(', '),
-    Amount_NGN: price,
-    Payment_Method: 'Bank Transfer',
-    Status: 'New Order',
-    Source: 'Order Form'
+  // Save order data for after payment
+  const orderData = {
+    order_id:            orderId,
+    submitted_at:        new Date().toISOString(),
+    sender_name:         v('firstName') + ' ' + v('lastName'),
+    sender_email:        v('email'),
+    sender_phone:        v('phone'),
+    business_name:       v('businessName'),
+    pickup_address:      v('pickupAddress'),
+    pickup_city:         v('pickupCity'),
+    pickup_date:         v('pickupDate'),
+    pickup_time:         v('pickupTime'),
+    recipient_name:      v('recipientName'),
+    recipient_phone:     v('recipientPhone'),
+    delivery_address:    v('deliveryAddress'),
+    delivery_state:      v('deliveryState'),
+    delivery_city:       v('deliveryCity'),
+    delivery_type:       state.deliveryType,
+    package_type:        state.pkgType,
+    package_weight:      state.pkgWeight,
+    package_description: v('pkgDesc'),
+    declared_value:      v('pkgValue'),
+    special_handling:    state.specialHandling.join(', '),
+    amount_ngn:          price,
+    status:              'Awaiting Payment',
+    source:              'Order Form — swiftfifteenexpress.com/order'
   };
 
+  const handler = PaystackPop.setup({
+    key:       PAYSTACK_PUBLIC_KEY,
+    email:     orderData.sender_email || 'customer@swiftfifteenexpress.com',
+    amount:    price * 100,  // kobo
+    currency:  'NGN',
+    ref:       orderId,
+    metadata: {
+      order_id:       orderId,
+      customer_name:  orderData.sender_name,
+      delivery_type:  state.deliveryType,
+      pickup_address: orderData.pickup_address,
+      delivery_address: orderData.delivery_address
+    },
+    onClose: function() {
+      // User closed popup without paying — do nothing
+      console.log('Payment popup closed');
+    },
+    callback: function(response) {
+      // Payment successful — verify and dispatch
+      onPaymentSuccess(response.reference, orderData);
+    }
+  });
+
+  handler.openIframe();
+}
+
+// ── Called after Paystack confirms payment ────────────────────
+async function onPaymentSuccess(reference, orderData) {
+  // Show processing message
+  const page5Content = document.querySelector('#page5 .card-body');
+  if (page5Content) {
+    const msg = document.getElementById('paymentProcessingMsg');
+    if (msg) { msg.style.display = 'block'; }
+    const btn = document.getElementById('paystackBtn');
+    if (btn) btn.style.display = 'none';
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+
   try {
-    // Send as flat form-encoded so Make.com maps each field individually
+    // Step 1 — Log to Make.com webhook
     const params = new URLSearchParams();
-    Object.entries(data).forEach(([k, v]) => params.append(k, String(v)));
-    await fetch(WEBHOOK_URL, {
+    const flatOrder = {
+      Order_ID:            orderData.order_id,
+      Submitted_At:        orderData.submitted_at,
+      First_Name:          v('firstName'),
+      Last_Name:           v('lastName'),
+      Phone_Number:        orderData.sender_phone,
+      Email_Address:       orderData.sender_email,
+      Business_Name:       orderData.business_name,
+      Pickup_Address:      orderData.pickup_address,
+      Pickup_City:         orderData.pickup_city,
+      Pickup_Date:         orderData.pickup_date,
+      Pickup_Time:         orderData.pickup_time,
+      Recipient_Name:      orderData.recipient_name,
+      Recipient_Phone:     orderData.recipient_phone,
+      Delivery_Address:    orderData.delivery_address,
+      Delivery_State:      orderData.delivery_state,
+      Delivery_City:       orderData.delivery_city,
+      Delivery_Type:       orderData.delivery_type,
+      Package_Type:        orderData.package_type,
+      Package_Weight:      orderData.package_weight,
+      Package_Description: orderData.package_description,
+      Declared_Value_NGN:  orderData.declared_value,
+      Special_Handling:    orderData.special_handling,
+      Amount_NGN:          orderData.amount_ngn,
+      Payment_Method:      'Paystack',
+      Paystack_Reference:  reference,
+      Status:              'Paid — Dispatching'
+    };
+    Object.entries(flatOrder).forEach(([k,vv])=>params.append(k,String(vv)));
+    fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString(),mode:'no-cors'});
+
+    // Step 2 — Verify payment + dispatch Kwikpik via Vercel
+    const verifyRes = await fetch(VERCEL_BASE + '/api/verify-payment', {
       method: 'POST',
-      headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: params.toString(),
-      mode: 'no-cors'
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ reference: reference, order_data: orderData })
     });
+    const verifyData = await verifyRes.json();
+    console.log('Verify + dispatch result:', verifyData);
 
-    // GA4 event
-    gtag('event','purchase',{
-      event_category:'Order Form',
-      event_label: state.deliveryType,
-      value: price
-    });
+    // Step 3 — Fire GA4 + Meta Pixel purchase events
+    gtag('event','purchase',{event_category:'Order Form',event_label:state.deliveryType,value:orderData.amount_ngn});
+    fbq('track','Purchase',{currency:'NGN',value:orderData.amount_ngn,content_name:state.deliveryType});
 
-    // Meta Pixel — Purchase event (switch campaign to this once 50+ fires)
-    fbq('track', 'Purchase', {
-      content_name: state.deliveryType,
-      content_category: state.pkgType,
-      currency: 'NGN',
-      value: price,
-      content_ids: [data.order_id],
-      num_items: 1
-    });
+    // Step 4 — Show success screen
+    document.getElementById('page5').classList.remove('active');
+    const successScreen = document.getElementById('successScreen');
+    successScreen.style.display = 'block';
 
-    // Build WhatsApp message
-    const msg = encodeURIComponent(
-      `Hi Swift-Fifteen Express! 👋 I just placed an order on your website.%0A%0A` +
-      `*Order ID:* ${data.order_id}%0A` +
-      `*Name:* ${data.first_name} ${data.last_name}%0A` +
-      `*Delivery type:* ${state.deliveryType}%0A` +
-      `*Pickup:* ${data.pickup_address}%0A` +
-      `*Deliver to:* ${data.recipient_name} at ${data.delivery_address}%0A` +
-      `*Package:* ${data.package_description}%0A` +
-      `*Amount:* ₦${price.toLocaleString()}%0A%0A` +
-      `I have made the bank transfer. Please confirm and assign my rider. Thank you!`
-    );
-    document.getElementById('waOrderBtn').href = `https://wa.me/2348029234994?text=${msg}`;
-
-    // ── Path B: Auto-dispatch via Kwikpik ──────────────────
-    if (PATH_B_ACTIVE) {
-      try {
-        btn.textContent = 'Dispatching your rider...';
-        const dispatchRes = await fetch(VERCEL_BASE + '/api/dispatch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            order_id:            data.order_id,
-            sender_name:         data.first_name + ' ' + data.last_name,
-            sender_phone:        data.phone,
-            pickup_address:      data.pickup_address,
-            pickup_city:         data.pickup_city,
-            pickup_date:         data.pickup_date,
-            pickup_time:         data.pickup_time,
-            recipient_name:      data.recipient_name,
-            recipient_phone:     data.recipient_phone,
-            delivery_address:    data.delivery_address,
-            package_description: data.package_description,
-            package_weight:      data.package_weight,
-            special_handling:    data.special_handling
-          })
-        });
-        const dispatchData = await dispatchRes.json();
-        if (dispatchData.success && dispatchData.tracking_url) {
-          state.kwikpikTracking = dispatchData;
-          // Update WhatsApp message to include tracking link
-          const trackMsg = encodeURIComponent(
-            `Hi Swift-Fifteen! Order ${data.order_id} placed & rider dispatched!\n` +
-            `Track live: ${dispatchData.tracking_url}\n` +
-            `Pickup: ${data.pickup_address}\n` +
-            `Deliver to: ${data.recipient_name} — ${data.delivery_address}\n` +
-            `Amount: \u20a6${price.toLocaleString()} — transfer sent.`
-          );
-          document.getElementById('waOrderBtn').href = `https://wa.me/2348029234994?text=${trackMsg}`;
-          // Show live tracking box on success screen
-          const tbox = document.getElementById('trackingLinkBox');
-          if (tbox) {
-            tbox.innerHTML = `<div style="margin-top:1rem;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:1rem;text-align:left"><div style="font-size:0.75rem;font-weight:700;color:#16a34a;letter-spacing:0.04em;margin-bottom:6px">🎉 RIDER DISPATCHED</div><div style="font-size:0.85rem;color:#1e2533;margin-bottom:8px">Your Kwikpik rider is on the way. Track your delivery live:</div><a href="${dispatchData.tracking_url}" target="_blank" style="display:block;background:#1A3C6E;color:white;padding:0.7rem 1rem;border-radius:8px;text-align:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.85rem;text-decoration:none;">📍 Track My Delivery Live →</a></div>`;
-            tbox.style.display = 'block';
-          }
-        }
-      } catch(dispatchErr) {
-        console.error('Dispatch error (non-blocking):', dispatchErr);
+    // Build success content based on dispatch result
+    const trackingBox = document.getElementById('trackingLinkBox');
+    if (verifyData.success && verifyData.dispatch_status === 'success' && verifyData.tracking_url) {
+      // Full success — payment verified + rider dispatched
+      successScreen.querySelector('h2').textContent = 'Paid & Rider Dispatched! 🎉';
+      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed and your Kwikpik rider has been assigned. Track your delivery below.`;
+      if (trackingBox) {
+        trackingBox.innerHTML = `<div style="margin-top:1rem;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:1rem;text-align:center"><div style="font-size:0.75rem;font-weight:700;color:#16a34a;letter-spacing:0.04em;margin-bottom:8px">🏍️ RIDER DISPATCHED</div><a href="${verifyData.tracking_url}" target="_blank" style="display:block;background:#1A3C6E;color:white;padding:0.85rem 1rem;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.9rem;text-decoration:none;">📍 Track My Delivery Live →</a></div>`;
+        trackingBox.style.display = 'block';
       }
+      // Hide WhatsApp button — not needed when fully automated
+      const waBtn = document.getElementById('waOrderBtn');
+      if (waBtn) waBtn.style.display = 'none';
+    } else if (verifyData.payment_verified) {
+      // Payment confirmed but dispatch needs manual follow-up
+      successScreen.querySelector('h2').textContent = 'Payment Confirmed! 🎉';
+      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link on WhatsApp within 30 minutes.`;
+      const waMsg = encodeURIComponent(`Hi Swift-Fifteen! Payment confirmed for Order ${orderData.order_id}. Paystack ref: ${reference}. Please assign my rider. Pickup: ${orderData.pickup_address}. Deliver to: ${orderData.recipient_name} at ${orderData.delivery_address}.`);
+      const waBtn = document.getElementById('waOrderBtn');
+      if (waBtn) { waBtn.href = `https://wa.me/2348029234994?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
     }
 
-    // Show success screen
-    document.getElementById('page5').classList.remove('active');
-    document.getElementById('successScreen').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch(err) {
-    alert('Something went wrong. Please try again or WhatsApp us directly on 08029234994.');
-    btn.disabled = false;
-    btn.textContent = '✅ Confirm Order & Notify Us on WhatsApp';
+    console.error('Post-payment error:', err);
+    // Payment was made — show success even if dispatch had an error
+    document.getElementById('page5').classList.remove('active');
+    document.getElementById('successScreen').style.display = 'block';
+    successScreen.querySelector('p').innerHTML = `Your payment is confirmed! WhatsApp us your order ID <strong>${orderData.order_id}</strong> and we'll assign your rider immediately.`;
+    window.scrollTo({top:0, behavior:'smooth'});
   }
 }
 
 // Init
 updateProgress(1);
-document.getElementById('acctNum').textContent = BANK_ACCOUNT;
 </script>
 </body>
 </html>
