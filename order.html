@@ -778,13 +778,13 @@ footer a{color:var(--orange);text-decoration:none}
       Send Payment Confirmation on WhatsApp
     </a>
     <div id="trackingLinkBox" style="display:none;width:100%;max-width:420px;margin:0 auto"></div>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:08029234994" style="color:var(--orange)">08029234994</a></p>
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--gray-400)">Questions? Call or WhatsApp us: <a href="tel:07060642357" style="color:var(--orange)">07060642357</a></p>
   </div>
 
 </div><!-- /order-wrap -->
 
 <footer>
-  <p>© 2025 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2348029234994">WhatsApp</a></p>
+  <p>© 2026 Swift-Fifteen Express — "Where Speed Meets Safety" | <a href="mailto:swiftfifteenexpress@gmail.com">swiftfifteenexpress@gmail.com</a> | <a href="https://wa.me/2347060642357">WhatsApp</a></p>
 </footer>
 
 <script>
@@ -792,7 +792,7 @@ footer a{color:var(--orange);text-decoration:none}
 // CONFIGURATION
 // ============================================================
 const VERCEL_BASE         = "https://swiftfifteen-api.vercel.app";
-const WEBHOOK_URL         = "https://hook.eu1.make.com/spghqh54xphosrxo1k058pz2a2pz37op";
+const WEBHOOK_URL         = "https://hook.eu1.make.com/m6nwuingrfc9nco7zktdfn56criif8v7";
 const PAYSTACK_PUBLIC_KEY = "pk_live_c8e115a5c1357bd5b95fd67eec6781b3f74715db";
 // ============================================================
 
@@ -1196,7 +1196,7 @@ async function onPaymentSuccess(reference, orderData) {
       successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed. Our team is assigning your rider now — you'll receive a tracking link on WhatsApp within 30 minutes.`;
       const waMsg = encodeURIComponent(`Hi Swift-Fifteen! Payment confirmed for Order ${orderData.order_id}. Paystack ref: ${reference}. Please assign my rider. Pickup: ${orderData.pickup_address}. Deliver to: ${orderData.recipient_name} at ${orderData.delivery_address}.`);
       const waBtn = document.getElementById('waOrderBtn');
-      if (waBtn) { waBtn.href = `https://wa.me/2348029234994?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
+      if (waBtn) { waBtn.href = `https://wa.me/2347060642357?text=${waMsg}`; waBtn.style.display = 'inline-flex'; }
     }
 
     window.scrollTo({top:0, behavior:'smooth'});
