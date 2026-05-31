@@ -832,7 +832,7 @@ function getPrice() {
 
   // Apply 20% launch discount if active
   if (isLaunchOfferActive()) {
-    price = Math.ceil((price * 0.2) / 100) * 100;
+    price = Math.ceil((price * 0.8) / 100) * 100;
     price = Math.max(price, 500); // minimum ₦500 even with discount
   }
 
