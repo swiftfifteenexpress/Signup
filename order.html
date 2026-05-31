@@ -588,20 +588,20 @@ footer a{color:var(--orange);text-decoration:none}
         <div class="field-group" style="margin-top:0.5rem">
           <label>Delivery Type <span class="req">*</span></label>
           <div class="radio-grid" id="deliveryTypeGrid" style="margin-top:0.5rem">
-            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','2500','dt-sameday')">
+            <div class="radio-card" id="dt-sameday" onclick="selectDelivery('Same-day Lagos','dt-sameday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Same-day Lagos</div><div class="radio-card-sub">Delivered today within Lagos</div></div>
-              <div class="price-tag">₦2,500+</div>
+              <div class="price-tag" id="price-sameday">Getting price...</div>
             </div>
-            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','1800','dt-nextday')">
+            <div class="radio-card" id="dt-nextday" onclick="selectDelivery('Next-day Lagos','dt-nextday')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Next-day Lagos</div><div class="radio-card-sub">Delivered tomorrow within Lagos</div></div>
-              <div class="price-tag">₦1,800+</div>
+              <div class="price-tag" id="price-nextday">Getting price...</div>
             </div>
-            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','5000','dt-interstate')">
+            <div class="radio-card" id="dt-interstate" onclick="selectDelivery('Interstate 48hr','dt-interstate')">
               <div class="radio-dot"></div>
               <div><div class="radio-card-label">Interstate 48hr</div><div class="radio-card-sub">Delivery to any state in Nigeria</div></div>
-              <div class="price-tag">₦5,000+</div>
+              <div class="price-tag" id="price-interstate">₦5,000+</div>
             </div>
           </div>
           <div class="error-msg" id="err-deliveryType" style="display:none">Please select a delivery type</div>
@@ -945,9 +945,55 @@ function validatePage(page) {
 }
 
 // Delivery type selection
-function selectDelivery(type, basePrice, id) {
-  state.deliveryType = type;
-  state.deliveryPrice = parseInt(basePrice);
+// ── Kwikpik live price estimate ──────────────────────────
+async function fetchEstimate() {
+  const pickup   = document.getElementById('pickupAddress').value.trim();
+  const delivery = document.getElementById('deliveryAddress').value.trim();
+  if (!pickup || !delivery) return;
+
+  const samedayEl    = document.getElementById('price-sameday');
+  const nextdayEl    = document.getElementById('price-nextday');
+  if (samedayEl)  samedayEl.textContent  = 'Calculating...';
+  if (nextdayEl)  nextdayEl.textContent  = 'Calculating...';
+
+  try {
+    const res = await fetch(VERCEL_BASE + '/api/estimate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pickup_address: pickup, delivery_address: delivery })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      const samedayPrice  = data.your_price;
+      const nextdayPrice  = Math.max(Math.ceil((data.your_price * 0.85) / 100) * 100, 2500);
+      state.livePrices = {
+        'Same-day Lagos':  samedayPrice,
+        'Next-day Lagos':  nextdayPrice,
+        'Interstate 48hr': 5000
+      };
+      if (samedayEl)  samedayEl.textContent  = formatNGN(samedayPrice);
+      if (nextdayEl)  nextdayEl.textContent  = formatNGN(nextdayPrice);
+
+      // Update selected delivery type price if already chosen
+      if (state.deliveryType && state.livePrices[state.deliveryType]) {
+        state.deliveryPrice = state.livePrices[state.deliveryType];
+      }
+    } else {
+      if (samedayEl)  samedayEl.textContent  = '₦3,000+';
+      if (nextdayEl)  nextdayEl.textContent  = '₦2,500+';
+    }
+  } catch (err) {
+    console.error('fetchEstimate error:', err);
+    if (samedayEl)  samedayEl.textContent  = '₦3,000+';
+    if (nextdayEl)  nextdayEl.textContent  = '₦2,500+';
+    state.livePrices = { 'Same-day Lagos': 3000, 'Next-day Lagos': 2500, 'Interstate 48hr': 5000 };
+  }
+}
+
+function selectDelivery(type, id) {
+  state.deliveryType  = type;
+  state.deliveryPrice = (state.livePrices && state.livePrices[type]) || 3000;
   document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c => c.classList.remove('selected'));
   document.getElementById(id).classList.add('selected');
 }
