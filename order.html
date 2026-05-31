@@ -830,9 +830,9 @@ function getPrice() {
     price = {'Same-day Lagos':3000,'Next-day Lagos':2500,'Interstate 48hr':5000}[state.deliveryType] || 0;
   }
 
-  // Apply 50% launch discount if active
+  // Apply 20% launch discount if active
   if (isLaunchOfferActive()) {
-    price = Math.ceil((price * 0.5) / 100) * 100;
+    price = Math.ceil((price * 0.2) / 100) * 100;
     price = Math.max(price, 500); // minimum ₦500 even with discount
   }
 
