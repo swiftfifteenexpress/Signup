@@ -843,19 +843,19 @@ const state = {
   kwikpikTracking: null
 };
 
-// Pricing map
-const prices = {
-  'Same-day Lagos':    {under5: 2500, over5: 4000},
-  'Next-day Lagos':    {under5: 1800, over5: 3000},
-  'Interstate 48hr':   {under5: 5000, over5: 5000}
-};
-
+// getPrice always reads from live Kwikpik prices stored in state.livePrices
 function getPrice() {
-  const d = state.deliveryType;
-  const w = state.pkgWeight;
-  if (!d || !prices[d]) return 0;
-  const heavy = w === '5–20kg' || w === '20kg+';
-  return heavy ? prices[d].over5 : prices[d].under5;
+  if (!state.deliveryType) return 0;
+  if (state.livePrices && state.livePrices[state.deliveryType]) {
+    return state.livePrices[state.deliveryType];
+  }
+  // Fallback if estimate hasn't run yet
+  const fallbacks = {
+    'Same-day Lagos':  3000,
+    'Next-day Lagos':  2500,
+    'Interstate 48hr': 5000
+  };
+  return fallbacks[state.deliveryType] || 0;
 }
 
 function formatNGN(n) {
@@ -967,13 +967,20 @@ async function fetchEstimate() {
     if (data.success) {
       const samedayPrice  = data.your_price;
       const nextdayPrice  = Math.max(Math.ceil((data.your_price * 0.85) / 100) * 100, 2500);
+      // Interstate = same-day price + 20% surcharge for longer haul, minimum ₦5,000
+      const interstatePrice = Math.max(Math.ceil((samedayPrice * 1.2) / 100) * 100, 5000);
+
       state.livePrices = {
         'Same-day Lagos':  samedayPrice,
         'Next-day Lagos':  nextdayPrice,
-        'Interstate 48hr': 5000
+        'Interstate 48hr': interstatePrice
       };
       if (samedayEl)  samedayEl.textContent  = formatNGN(samedayPrice);
       if (nextdayEl)  nextdayEl.textContent  = formatNGN(nextdayPrice);
+
+      // Update interstate price tag too
+      const interstateEl = document.getElementById('price-interstate');
+      if (interstateEl) interstateEl.textContent = formatNGN(interstatePrice);
 
       // Update selected delivery type price if already chosen
       if (state.deliveryType && state.livePrices[state.deliveryType]) {
@@ -1005,9 +1012,9 @@ function updateDeliveryType() {
     // auto-select interstate
     document.querySelectorAll('#deliveryTypeGrid .radio-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('dt-interstate').classList.add('selected');
-    state.deliveryType = 'Interstate 48hr';
-    state.deliveryPrice = 5000;
-    note.style.display = 'flex';
+    state.deliveryType  = 'Interstate 48hr';
+    state.deliveryPrice = (state.livePrices && state.livePrices['Interstate 48hr']) || 5000;
+    note.style.display  = 'flex';
   } else {
     note.style.display = 'none';
   }
@@ -1068,16 +1075,25 @@ function buildSummary() {
     `<div class="summary-item${i.full?' full':''}"><div class="s-label">${i.label}</div><div class="s-value">${i.value}</div></div>`
   ).join('');
 
-  document.getElementById('psService').textContent = state.deliveryType;
-  document.getElementById('psAmount').textContent = formatNGN(price);
-  document.getElementById('bankAmount').textContent = formatNGN(price);
+  // Always re-read live price at summary time in case user changed delivery type
+  const livePrice = getPrice();
+
+  // Update amount highlight box
+  const ahAmount = document.getElementById('psAmount');
+  const ahService = document.getElementById('psService');
+  if (ahAmount)  ahAmount.textContent  = formatNGN(livePrice);
+  if (ahService) ahService.textContent = state.deliveryType;
+
+  document.getElementById('bankAmount').textContent = formatNGN(livePrice);
   document.getElementById('acctNum').textContent = BANK_ACCOUNT;
   const bankNameEl = document.getElementById('bankNameDisplay');
   if (bankNameEl) bankNameEl.textContent = BANK_NAME;
-  // Update Paystack button href with correct amount
-  const amountKobo = price * 100;
-  const emailVal = encodeURIComponent(document.getElementById('email').value || '');
-  document.getElementById('paystackBtn').href =
+
+  // Update Paystack button with live price in kobo
+  const amountKobo = livePrice * 100;
+  const emailVal   = encodeURIComponent(document.getElementById('email').value || '');
+  const paystackEl = document.getElementById('paystackBtn');
+  if (paystackEl) paystackEl.href =
     `https://paystack.shop/pay/swiftfifteenexpress?amount=${amountKobo}&email=${emailVal}`;
 }
 
