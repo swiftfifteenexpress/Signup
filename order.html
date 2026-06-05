@@ -1182,7 +1182,7 @@ async function onPaymentSuccess(reference, orderData) {
     if (verifyData.success && verifyData.dispatch_status === 'success' && verifyData.tracking_url) {
       // Full success — payment verified + rider dispatched
       successScreen.querySelector('h2').textContent = 'Paid & Rider Dispatched! 🎉';
-      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed and your Kwikpik rider has been assigned. Track your delivery below.`;
+      successScreen.querySelector('p').innerHTML = `Your payment of <strong>${formatNGN(orderData.amount_ngn)}</strong> is confirmed and your Swift-fifteen Express rider has been assigned. Track your delivery below.`;
       if (trackingBox) {
         trackingBox.innerHTML = `<div style="margin-top:1rem;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:1rem;text-align:center"><div style="font-size:0.75rem;font-weight:700;color:#16a34a;letter-spacing:0.04em;margin-bottom:8px">🏍️ RIDER DISPATCHED</div><a href="${verifyData.tracking_url}" target="_blank" style="display:block;background:#1A3C6E;color:white;padding:0.85rem 1rem;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.9rem;text-decoration:none;">📍 Track My Delivery Live →</a></div>`;
         trackingBox.style.display = 'block';
