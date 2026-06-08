@@ -809,8 +809,8 @@ const state = {
 // Launch offer: 50% off first 3 bookings — June 1–3 2026 WAT only
 function isLaunchOfferActive() {
   const now       = new Date();
-  const offerStart = new Date('2026-06-01T00:00:00+01:00'); // WAT
-  const offerEnd   = new Date('2026-06-03T23:59:59+01:00'); // WAT
+  const offerStart = new Date('2026-08-01T00:00:00+01:00'); // WAT
+  const offerEnd   = new Date('2026-10-03T23:59:59+01:00'); // WAT
   return now >= offerStart && now <= offerEnd;
 }
 
