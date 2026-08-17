@@ -1,0 +1,14 @@
+{
+  "name": "swift-fifteen-express-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Swift-Fifteen Express marketing site (index.html) and order flow (order.html).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.2.1"
+  }
+}
